@@ -8,7 +8,7 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        include: __dirname + '/app',
+        include: __dirname + '/js',
         loader: "babel"
       },
     ]
