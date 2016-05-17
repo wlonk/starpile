@@ -3,7 +3,7 @@
 
 var player = require("../js/player.js");
 var engine = require("../js/engine.js");
-var sceneType = engine.SceneType
-
+var sceneType = engine.SceneType;
 var spaceScene = new engine.scene(sceneType.SPACE);
-engine.draw(spaceScene.sceneData);
+var config = {};
+engine.draw(spaceScene.sceneData, config);
