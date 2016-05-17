@@ -67,7 +67,7 @@
 	    planetSize: 5,
 	    planetTexture: "ice_1.png",
 	    planetName: "Matthoth",
-	    lightingColor: 0xffffff
+	    lightingColor: 0xADDFFF
 	};
 	var spaceScene = new engine.scene(sceneType, sceneConfig);
 	var drawData = spaceScene.sceneData;
@@ -176,19 +176,22 @@
 	        });
 	        // light
 	        var light = new THREE.PointLight(sceneConfig.lightingColor, 3, 50);
+	        var textLight = new THREE.PointLight(sceneConfig.lightingColor, 2, 50);
 	        // text
 	        var textLoader = new THREE.FontLoader();
 	        textLoader.load('../js/optimer_regular.typeface.js', function (font) {
 	            var textGeometry = new THREE.TextGeometry(sceneConfig.planetName.toLowerCase(), { font: font, size: 1.5, height: 0 });
 	            var textMaterial = new THREE.MeshPhongMaterial({ color: sceneConfig.textColor });
 	            var textMesh = new THREE.Mesh(textGeometry, textMaterial);
-	            textMesh.position.set(-4, 12.5, -15);
+	            textMesh.position.set(-30, 12.5, -15);
 	            localScene.add(textMesh);
 	            ret.entities.planetTitle = textMesh;
 	        });
 	        light.position.set(0, 0, 20);
+	        textLight.position.set(-30, 0, 20);
 	        camera.position.set(0, 0, 10);
 	        localScene.add(light);
+	        localScene.add(textLight);
 	        localScene.add(starSystem);
 	    } else if (this.sceneType == SceneType.STATION) {
 	        // station scene

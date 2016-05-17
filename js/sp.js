@@ -12,7 +12,7 @@ var sceneConfig = {
     planetSize: 5,
     planetTexture: "ice_1.png",
     planetName: "Matthoth",
-    lightingColor: 0xffffff,
+    lightingColor: 0xADDFFF,
 }
 var spaceScene = new engine.scene(sceneType, sceneConfig);
 var drawData = spaceScene.sceneData;
