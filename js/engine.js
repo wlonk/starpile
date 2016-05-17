@@ -32,13 +32,13 @@ var scene = function (sceneType, sceneConfig) {
 var draw = function (scenePack, drawConfig) {
     scenePack.renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(scenePack.renderer.domElement);
-
+    // TODO: do something smarter about rotation
     function render() {
         requestAnimationFrame(render);
-        scenePack.entities.planet.rotation.x += 0.00001;
         scenePack.entities.planet.rotation.y += 0.0015;
         scenePack.renderer.render(scenePack.scene, scenePack.camera);
     }
+
     render();
 };
 

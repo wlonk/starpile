@@ -68,8 +68,8 @@
 	    planetTexture: "ice_1.png"
 	};
 	var spaceScene = new engine.scene(sceneType.SPACE, sceneConfig);
-	var config = {};
-	engine.draw(spaceScene.sceneData, config);
+	var drawConfig = {};
+	engine.draw(spaceScene.sceneData, drawConfig);
 
 /***/ },
 /* 2 */
@@ -121,13 +121,13 @@
 	var draw = function draw(scenePack, drawConfig) {
 	    scenePack.renderer.setSize(window.innerWidth, window.innerHeight);
 	    document.body.appendChild(scenePack.renderer.domElement);
-
+	    // TODO: do something smarter about rotation
 	    function render() {
 	        requestAnimationFrame(render);
-	        scenePack.entities.planet.rotation.x += 0.00001;
 	        scenePack.entities.planet.rotation.y += 0.0015;
 	        scenePack.renderer.render(scenePack.scene, scenePack.camera);
 	    }
+
 	    render();
 	};
 
