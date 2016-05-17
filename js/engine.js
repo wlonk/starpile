@@ -40,7 +40,6 @@ var draw = function (scenePack, drawConfig) {
         }
         scenePack.renderer.render(scenePack.scene, scenePack.camera);
     }
-
     render();
 };
 
@@ -65,8 +64,9 @@ function getScene(sceneType, sceneConfig) {
         // add method to deal with adding text to a scene
         // addText(text, scene)
         // add in support for planet types
+        renderer.setClearColor(0x000000);
         var stars = new THREE.Geometry();
-        for (var i=0; i<1000; i++) {
+        for (var i=0; i<5000; i++) {
             stars.vertices.push(new THREE.Vector3(
                 1e3 * Math.random() - 5e2,
                 1e3 * Math.random() - 5e2,
@@ -81,36 +81,36 @@ function getScene(sceneType, sceneConfig) {
             sceneConfig.nearClip,
             sceneConfig.farClip);
         // planet
+        var geometry = new THREE.SphereGeometry(sceneConfig.planetSize, 50, 50);
         var textureFile = `img/${sceneConfig.planetTexture}`;
         var textureLoader = new THREE.TextureLoader();
         textureLoader.load(textureFile, function(texture) {
             var material = new THREE.MeshLambertMaterial({map: texture});
-            var geometry = new THREE.SphereGeometry(sceneConfig.planetSize, 50, 50);
             var sphere = new THREE.Mesh(geometry, material);
             sphere.position.set(0, 0, -10);
             localScene.add(sphere);
             ret.entities.planet = sphere;
         });
+        //});
         // light
-        var light = new THREE.PointLight(sceneConfig.lightingColor, 3, 50);
-        var textLight = new THREE.PointLight(sceneConfig.lightingColor, 2, 50);
-        // text -- planet title
+        // -- planet
+        var light = new THREE.PointLight(sceneConfig.lightingColor, 3, 50, 1);
+        // text
+        // -- planet title
         var textLoader = new THREE.FontLoader();
+        var textX = (window.innerWidth - window.innerWidth) - (window.innerWidth / 100)
         textLoader.load('../js/optimer_regular.typeface.js', function(font) {
             var textGeometry = new THREE.TextGeometry(sceneConfig.planetName.toLowerCase(),
                                 {font: font, size: 1.5, height: 0});
             var textMaterial = new THREE.MeshPhongMaterial({color: sceneConfig.textColor});
             var textMesh = new THREE.Mesh(textGeometry, textMaterial);
-            textMesh.position.set(-30, 12.5, -15);
+            textMesh.position.set(textX, 10, -10);
             localScene.add(textMesh);
             ret.entities.planetTitle = textMesh;
         });
-
-        light.position.set(0, 0, 20);
-        textLight.position.set(-30, 0, 20);
+        light.position.set(-10, 0, 20);
         camera.position.set(0, 0, 10);
         localScene.add(light);
-        localScene.add(textLight);
         localScene.add(starSystem);
 
     } else if (this.sceneType == SceneType.STATION) {
