@@ -1,5 +1,3 @@
-var THREE = require("../node_modules/three/three.js");
-
 const SceneType = {
     SPACE: 0,
     STATION: 1,
@@ -33,9 +31,12 @@ var draw = function (scenePack, drawConfig) {
     scenePack.renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(scenePack.renderer.domElement);
     // TODO: do something smarter about rotation
+    //  separate function for rendering planets?
     function render() {
         requestAnimationFrame(render);
-        scenePack.entities.planet.rotation.y += 0.0015;
+        if (scenePack.entities.planet != undefined) {
+            scenePack.entities.planet.rotation.y += 0.0015;
+        }
         scenePack.renderer.render(scenePack.scene, scenePack.camera);
     }
 
@@ -59,8 +60,9 @@ function getScene(sceneType, sceneConfig) {
         // TODO
         //  * = parameterized
         //  add support for orbiting objects *
-        //  lighting *
-
+        // stars
+        // add method to deal with adding text to a scene
+        // addText(text, scene)
         var stars = new THREE.Geometry();
         for (var i=0; i<1000; i++) {
             stars.vertices.push(new THREE.Vector3(
@@ -68,7 +70,7 @@ function getScene(sceneType, sceneConfig) {
                 1e3 * Math.random() - 5e2,
                 -1e2));
         }
-        var starStuff = new THREE.PointsMaterial({color: 0x99FFFF});
+        var starStuff = new THREE.PointsMaterial({color: 0x99FFFF, size: 0.5});
         var starSystem = new THREE.Points(stars, starStuff);
 
         camera = new THREE.PerspectiveCamera(
@@ -76,20 +78,34 @@ function getScene(sceneType, sceneConfig) {
             aspectRatio,
             sceneConfig.nearClip,
             sceneConfig.farClip);
-
-        var geometry = new THREE.SphereGeometry(sceneConfig.planetSize, 50, 50);
+        // planet
         var textureFile = `img/${sceneConfig.planetTexture}`;
-        var texture = THREE.ImageUtils.loadTexture(textureFile);
-        var material = new THREE.MeshLambertMaterial({map: texture});
-        var sphere = new THREE.Mesh(geometry, material);
+        var textureLoader = new THREE.TextureLoader();
+        textureLoader.load(textureFile, function(texture) {
+            var material = new THREE.MeshLambertMaterial({map: texture});
+            var geometry = new THREE.SphereGeometry(sceneConfig.planetSize, 50, 50);
+            var sphere = new THREE.Mesh(geometry, material);
+            sphere.position.set(0, 0, -10);
+            localScene.add(sphere);
+            ret.entities.planet = sphere;
+        });
+        // light
         var light = new THREE.PointLight(sceneConfig.lightingColor, 3, 50);
+        // text
+        var textLoader = new THREE.FontLoader();
+        textLoader.load('../js/optimer_regular.typeface.js', function(font) {
+            var textGeometry = new THREE.TextGeometry(sceneConfig.planetName.toLowerCase(),
+                                {font: font, size: 1.5, height: 0});
+            var textMaterial = new THREE.MeshPhongMaterial({color: sceneConfig.textColor});
+            var textMesh = new THREE.Mesh(textGeometry, textMaterial);
+            textMesh.position.set(-4, 12.5, -15);
+            localScene.add(textMesh);
+            ret.entities.planetTitle = textMesh;
+        });
         light.position.set(0, 0, 20);
-        sphere.position.set(0, 0, -10);
         camera.position.set(0, 0, 10);
         localScene.add(light);
-        localScene.add(sphere);
-        localScene.add(starSystem)
-        ret.entities.planet = sphere;
+        localScene.add(starSystem);
 
     } else if (this.sceneType == SceneType.STATION) {
         // station scene

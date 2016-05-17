@@ -3,15 +3,18 @@
 
 var player = require("../js/player.js");
 var engine = require("../js/engine.js");
-var sceneType = engine.SceneType;
+var sceneType = engine.SceneType.SPACE;
 var sceneConfig = {
     fieldOfView: 75,
     nearClip: 0.1,
     farClip: 1000,
+    textColor: 0x00FFFF,
     planetSize: 5,
+    planetTexture: "ice_1.png",
+    planetName: "Matthoth",
     lightingColor: 0xffffff,
-    planetTexture: "ice_1.png"
 }
-var spaceScene = new engine.scene(sceneType.SPACE, sceneConfig);
+var spaceScene = new engine.scene(sceneType, sceneConfig);
+var drawData = spaceScene.sceneData;
 var drawConfig = {};
-engine.draw(spaceScene.sceneData, drawConfig);
+engine.draw(drawData, drawConfig);
