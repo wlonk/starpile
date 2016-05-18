@@ -15,6 +15,7 @@ var sceneConfig = {
     lightingColor: 0xADDFFF,
 }
 var spaceScene = new engine.scene(sceneType, sceneConfig);
-var drawData = spaceScene.sceneData;
-var drawConfig = {};
-engine.draw(drawData, drawConfig);
+spaceScene.sceneData.then(function (drawData) {
+  var drawConfig = {};
+  engine.draw(drawData, drawConfig);
+})
