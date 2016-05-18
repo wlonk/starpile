@@ -31,6 +31,8 @@ function scene (sceneType, sceneConfig) {
 function draw (scenePack) {
   scenePack.renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(scenePack.renderer.domElement);
+  var api = require("../js/api.js");
+  api.apiCall('/users/', 'test', 'testing123');
 
   function render() {
     scenePack.entities.planet.rotation.y += 0.0015;
@@ -81,7 +83,7 @@ function getScene (sceneType, sceneConfig) {
         sceneConfig.farClip);
       // planet
       var geometry = new THREE.SphereGeometry(sceneConfig.planetSize, 50, 50);
-      var textureFile = `img/${sceneConfig.planetTexture}`;
+      var textureFile = `/assets/img/${sceneConfig.planetTexture}`;
       var textureLoader = new THREE.TextureLoader();
       textureLoader.load(textureFile, function(texture) {
         var material = new THREE.MeshLambertMaterial({map: texture});
@@ -99,10 +101,11 @@ function getScene (sceneType, sceneConfig) {
       // -- planet title
       var textLoader = new THREE.FontLoader();
       var textX = (window.innerWidth - window.innerWidth) - (window.innerWidth / 100)
-      textLoader.load('../js/optimer_regular.typeface.js', function(font) {
+      textLoader.load('/assets/js/helvetiker_regular.typeface.js', function(font) {
         var textGeometry = new THREE.TextGeometry(sceneConfig.planetName.toLowerCase(),
                                                   {font: font, size: 1.5, height: 0});
-        var textMaterial = new THREE.MeshPhongMaterial({color: sceneConfig.textColor});
+        var textMaterial = new THREE.MeshPhongMaterial({color: sceneConfig.textColor,
+                                                        specular: sceneConfig.textColor});
         var textMesh = new THREE.Mesh(textGeometry, textMaterial);
         textMesh.position.set(textX, 10, -10);
         localScene.add(textMesh);
